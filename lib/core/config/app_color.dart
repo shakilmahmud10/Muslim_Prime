@@ -221,4 +221,17 @@ class AppColor {
 
   // Hadith App Background
   static const Color hadithAppBackgroundColor = Color(0xFFF5F5F5);
+
+  // Custom Task Card widget Colors
+  static const Color taskCardOrange = Color(0xFFFEC96D);
+  static const Color taskCardGreen = Color(0xFF7BEDA3);
+  static const Color taskCardPurple = Color(0xFFA099FB);
+  static const Color taskCardYellow = Color(0xFFFEE9A7);
+  static const Color taskCardRed = Color(0xFFF9AF9E);
+  static const Color taskCardBlue = Color(0xFF71B3F6);
+
+  // Info section inside the card
+  static const Color taskCardInfoBgLight = Color(0x12000000); // Black with ~7% opacity for light theme
+  static const Color taskCardInfoBgDark = Color(0x1AFFFFFF); // White with ~10% opacity for dark theme
+  
 }

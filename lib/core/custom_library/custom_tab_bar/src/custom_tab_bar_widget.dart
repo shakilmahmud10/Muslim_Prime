@@ -55,16 +55,17 @@ class CustomTabBar extends StatelessWidget {
     // // Use theme colors as defaults
     final resolvedBackgroundColor =
         backgroundColor ?? AppColor.primaryColorLight10;
-    final resolvedSelectedColor = selectedColor ?? AppColor.primaryColorLight100;
+    final resolvedSelectedColor =
+        selectedColor ?? AppColor.primaryColorLight100;
     final resolvedUnselectedLabelColor =
-        unselectedLabelColor ?? AppColor.primaryColorLight10;
-    final resolvedLabelColor = labelColor ?? AppColor.textPrimaryColorLight;
+        unselectedLabelColor ?? AppColor.textPrimaryColorLight;
+    final resolvedLabelColor = labelColor ?? Colors.white;
 
     return Container(
       height: height,
       width: screenWidth,
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(borderRadius),
         border: border ?? Border(),
       ),
