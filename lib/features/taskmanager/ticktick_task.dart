@@ -23,7 +23,7 @@ class _TicktickTaskState extends State<TicktickTask>
   // ডেমো ডেটা ছবির উপর ভিত্তি করে
   final List<Map<String, dynamic>> taskData = [
     {
-      'heading': 'This is Heading',
+      'heading': 'This is Heading2',
       'body':
           'Typeface without relying on meaningful content. Lorem ipsum may work for the whole country and for color combinational flag that increase the redandacy of science work.',
       'isCompleted': true,
@@ -37,7 +37,7 @@ class _TicktickTaskState extends State<TicktickTask>
       'body':
           'Typeface without relying on meaningful content. Lorem ipsum may...',
       'isCompleted': true,
-      'isStrikethrough': false,
+      'isStrikethrough': true,
       'cardColor': AppColor.taskCardGreen,
       'date': '27 Rajab 1444 AH',
       'time': 'Open 24 Hours',
@@ -47,7 +47,7 @@ class _TicktickTaskState extends State<TicktickTask>
       'body':
           'Typeface without relying on meaningful content. Lorem ipsum may...',
       'isCompleted': false,
-      'isStrikethrough': true,
+      'isStrikethrough': false,
       'cardColor': AppColor.taskCardPurple,
       'date': '27 Rajab 1444 AH',
       'time': 'Open 24 Hours',
@@ -175,6 +175,13 @@ class _TicktickTaskState extends State<TicktickTask>
           // onTap: () {
           //   print('${task['heading']} tapped!');
           // },
+          onToggle: () {
+            // Toggle the completion status of the task
+            setState(() {
+              task['isCompleted'] = !task['isCompleted'];
+              task['isStrikethrough'] = task['isCompleted'];
+            });
+          },
         );
       },
     );

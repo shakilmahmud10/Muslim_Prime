@@ -1,4 +1,4 @@
-// lib/core/custom_library/custom_task_list/custom_task_card_widget.dart
+// File Name : lib\core\custom_library\custom_task_list\custom_task_card_widget.dart
 
 import 'package:flutter/material.dart';
 import 'package:muslim_prime_ui/core/config/app_color.dart';
@@ -14,7 +14,7 @@ class CustomTaskCard extends StatelessWidget {
   final TextStyle? headingTextStyle;
   final TextStyle? bodyTextStyle;
   final VoidCallback? onTap;
-  final ValueChanged<bool>? onToggleCheckbox; // Added onToggleCheckbox callback
+  final VoidCallback? onToggle; // ✅ নতুন কলব্যাক যোগ করা হলো
   final String? dateText;
   final String? timeText;
   final Widget? dateIcon;
@@ -32,7 +32,7 @@ class CustomTaskCard extends StatelessWidget {
     this.headingTextStyle,
     this.bodyTextStyle,
     this.onTap,
-    this.onToggleCheckbox, // Added onToggleCheckbox parameter
+    this.onToggle, // ✅ কনস্ট্রাক্টর আপডেট
     this.dateText,
     this.timeText,
     this.dateIcon,
@@ -53,32 +53,34 @@ class CustomTaskCard extends StatelessWidget {
     final resolvedHeadingStyle =
         headingTextStyle ??
         theme.textTheme.bodyMedium?.copyWith(
-          fontSize: 18,
+          fontSize: eighteenPx, // 18.0
           fontWeight: FontWeight.w600,
           color: isDark ? AppColor.white : AppColor.textPrimaryColorLight,
           decoration: isStrikethrough ? TextDecoration.lineThrough : null,
-          decorationColor: isDark
-              ? AppColor.grey600
-              : AppColor.textSecondaryColorLight,
+          decorationColor: isStrikethrough
+              ? (isDark ? AppColor.grey600 : AppColor.textSecondaryColorLight)
+              : null,
           decorationThickness: 2.0,
         );
 
     final resolvedBodyStyle =
         bodyTextStyle ??
         theme.textTheme.bodySmall?.copyWith(
-          fontSize: 14,
-          color: isDark ? AppColor.grey300 : AppColor.textSecondaryColorLight,
+          fontSize: fourteenPx, // 14.0
+          color: isStrikethrough
+              ? (isDark ? AppColor.grey600 : AppColor.textSecondaryColorLight)
+              : (isDark ? AppColor.grey300 : AppColor.textSecondaryColorLight),
           decoration: isStrikethrough ? TextDecoration.lineThrough : null,
-          decorationColor: isDark
-              ? AppColor.grey600
-              : AppColor.textSecondaryColorLight,
+          decorationColor: isStrikethrough
+              ? (isDark ? AppColor.grey600 : AppColor.textSecondaryColorLight)
+              : null,
           decorationThickness: 2.0,
         );
 
     final resolvedInfoTextStyle =
         infoTextStyle ??
         theme.textTheme.bodySmall?.copyWith(
-          fontSize: 12,
+          fontSize: twelvePx, // 12.0
           color: isDark
               ? AppColor.grey300.withOpacity(0.8)
               : AppColor.textSecondaryColorLight.withOpacity(0.8),
@@ -87,6 +89,37 @@ class CustomTaskCard extends StatelessWidget {
     final infoSectionBgColor = isDark
         ? AppColor.taskCardInfoBgDark
         : AppColor.taskCardInfoBgLight;
+
+    // ✅ CHECKBOX UI Logic
+    const double checkboxSize = 32.0;
+    const double checkIconSize = 18.0;
+    const double borderWidth = 1.5;
+
+    final Color checkboxBgColor = isCompleted
+        ? AppColor
+              .successColor // Completed: Green Background
+        : (isDark
+              ? AppColor.black54
+              : AppColor.white); // Incomplete: White/Dark Grey Background
+
+    final Color checkboxBorderColor = isCompleted
+        ? AppColor
+              .white // Completed: White Border
+        : (isDark
+              ? contextColor.borderColor.withOpacity(0.5)
+              : AppColor.grey300); // Incomplete: Light Grey Border
+
+    final Widget checkIcon = isCompleted
+        ? const Icon(
+            Icons.check,
+            color: AppColor.white,
+            size: checkIconSize,
+          ) // Completed: White Check
+        : const Icon(
+            Icons.check,
+            color: AppColor.grey300,
+            size: checkIconSize,
+          ); // ✅ Incomplete: Grey Check
 
     return InkWell(
       onTap: onTap,
@@ -105,7 +138,7 @@ class CustomTaskCard extends StatelessWidget {
                 left: 12,
                 top: 12,
                 bottom: 12,
-                right: 12, // give space for checkbox
+                right: 12,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +162,7 @@ class CustomTaskCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                  const Spacer(),
+                  Spacer(),
 
                   // Info Section
                   if (dateText != null || timeText != null)
@@ -148,7 +181,7 @@ class CustomTaskCard extends StatelessWidget {
                                 dateIcon ??
                                     Icon(
                                       Icons.calendar_today_outlined,
-                                      size: 14,
+                                      size: fourteenPx,
                                       color: resolvedInfoTextStyle?.color,
                                     ),
                                 gapW8,
@@ -162,7 +195,7 @@ class CustomTaskCard extends StatelessWidget {
                                 timeIcon ??
                                     Icon(
                                       Icons.access_time_outlined,
-                                      size: 14,
+                                      size: fourteenPx,
                                       color: resolvedInfoTextStyle?.color,
                                     ),
                                 gapW8,
@@ -181,42 +214,25 @@ class CustomTaskCard extends StatelessWidget {
               top: 0,
               right: 0,
               child: InkWell(
-                onTap: onToggleCheckbox != null
-                    ? () => onToggleCheckbox!(!isCompleted)
-                    : null,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                  bottomLeft: Radius.circular(20),
-                ),
+                onTap: onToggle, // ✅ onToggle কল করা হলো
                 child: Container(
-                  width: 32,
-                  height: 32,
+                  width: checkboxSize,
+                  height: checkboxSize,
                   decoration: BoxDecoration(
-                    color: isCompleted
-                        ? AppColor.successColor
-                        : (isDark ? AppColor.black54 : AppColor.white),
+                    color: checkboxBgColor,
                     shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.only(
-                      // topRight: Radius.circular(15),
-                      topLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                      bottomLeft: Radius.circular(20),
+                    borderRadius: const BorderRadius.only(
+                      // ছবির সাথে মিল রেখে
+                      topLeft: Radius.circular(twentyPx),
+                      bottomRight: Radius.circular(twentyPx),
+                      bottomLeft: Radius.circular(twentyPx),
                     ),
-                    border: isCompleted
-                        ? Border.all(color: AppColor.white, width: 1.5)
-                        : Border.all(
-                            color: contextColor.borderColor.withOpacity(0.5),
-                            width: 1.5,
-                          ),
+                    border: Border.all(
+                      color: checkboxBorderColor,
+                      width: borderWidth,
+                    ),
                   ),
-                  child: isCompleted
-                      ? const Icon(Icons.check, color: AppColor.white, size: 18)
-                      : const Icon(
-                          Icons.check,
-                          color: AppColor.grey300,
-                          size: 18,
-                        ),
+                  child: Center(child: checkIcon),
                 ),
               ),
             ),
