@@ -17,12 +17,15 @@ class _TicktickTaskState extends State<TicktickTask>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  // State for the demo task
+  bool _isTaskCompleted = false;
+
   // ডেমো ডেটা ছবির উপর ভিত্তি করে
   final List<Map<String, dynamic>> taskData = [
     {
       'heading': 'This is Heading',
       'body':
-          'Typeface without relying on meaningful content. Lorem ipsum may...',
+          'Typeface without relying on meaningful content. Lorem ipsum may work for the whole country and for color combinational flag that increase the redandacy of science work.',
       'isCompleted': true,
       'isStrikethrough': true,
       'cardColor': AppColor.taskCardOrange,
@@ -44,7 +47,7 @@ class _TicktickTaskState extends State<TicktickTask>
       'body':
           'Typeface without relying on meaningful content. Lorem ipsum may...',
       'isCompleted': false,
-      'isStrikethrough': false,
+      'isStrikethrough': true,
       'cardColor': AppColor.taskCardPurple,
       'date': '27 Rajab 1444 AH',
       'time': 'Open 24 Hours',
@@ -93,6 +96,13 @@ class _TicktickTaskState extends State<TicktickTask>
     super.dispose();
   }
 
+  // Method to toggle the task completion state
+  void _toggleTaskCompletion(bool newValue) {
+    setState(() {
+      _isTaskCompleted = newValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,14 +138,14 @@ class _TicktickTaskState extends State<TicktickTask>
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // নতুন টাস্ক যোগ করার জন্য
-        },
-        backgroundColor: AppColor.primaryColorLight100,
-        child: const Icon(Icons.add, color: Colors.white),
-        shape: const CircleBorder(),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // নতুন টাস্ক যোগ করার জন্য
+      //   },
+      //   backgroundColor: AppColor.primaryColorLight100,
+      //   child: const Icon(Icons.add, color: Colors.white),
+      //   shape: const CircleBorder(),
+      // ),
     );
   }
 
@@ -162,9 +172,9 @@ class _TicktickTaskState extends State<TicktickTask>
           cardColor: task['cardColor'],
           dateText: task['date'],
           timeText: task['time'],
-          onTap: () {
-            print('${task['heading']} tapped!');
-          },
+          // onTap: () {
+          //   print('${task['heading']} tapped!');
+          // },
         );
       },
     );

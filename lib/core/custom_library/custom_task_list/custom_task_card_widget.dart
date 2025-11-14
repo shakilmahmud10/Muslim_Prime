@@ -14,6 +14,7 @@ class CustomTaskCard extends StatelessWidget {
   final TextStyle? headingTextStyle;
   final TextStyle? bodyTextStyle;
   final VoidCallback? onTap;
+  final ValueChanged<bool>? onToggleCheckbox; // Added onToggleCheckbox callback
   final String? dateText;
   final String? timeText;
   final Widget? dateIcon;
@@ -31,6 +32,7 @@ class CustomTaskCard extends StatelessWidget {
     this.headingTextStyle,
     this.bodyTextStyle,
     this.onTap,
+    this.onToggleCheckbox, // Added onToggleCheckbox parameter
     this.dateText,
     this.timeText,
     this.dateIcon,
@@ -48,29 +50,33 @@ class CustomTaskCard extends StatelessWidget {
     final defaultBorderRadius = borderRadius ?? radius10;
 
     // Define text styles based on theme
-    final resolvedHeadingStyle = headingTextStyle ??
+    final resolvedHeadingStyle =
+        headingTextStyle ??
         theme.textTheme.bodyMedium?.copyWith(
-          fontSize: 14,
+          fontSize: 18,
           fontWeight: FontWeight.w600,
           color: isDark ? AppColor.white : AppColor.textPrimaryColorLight,
           decoration: isStrikethrough ? TextDecoration.lineThrough : null,
-          decorationColor:
-              isDark ? AppColor.grey600 : AppColor.textSecondaryColorLight,
-          decorationThickness: 2.0,
-        );
-
-    final resolvedBodyStyle = bodyTextStyle ??
-        theme.textTheme.bodySmall?.copyWith(
-          color: isDark
-              ? AppColor.grey300
+          decorationColor: isDark
+              ? AppColor.grey600
               : AppColor.textSecondaryColorLight,
-          decoration: isStrikethrough ? TextDecoration.lineThrough : null,
-          decorationColor:
-              isDark ? AppColor.grey600 : AppColor.textSecondaryColorLight,
           decorationThickness: 2.0,
         );
 
-    final resolvedInfoTextStyle = infoTextStyle ??
+    final resolvedBodyStyle =
+        bodyTextStyle ??
+        theme.textTheme.bodySmall?.copyWith(
+          fontSize: 14,
+          color: isDark ? AppColor.grey300 : AppColor.textSecondaryColorLight,
+          decoration: isStrikethrough ? TextDecoration.lineThrough : null,
+          decorationColor: isDark
+              ? AppColor.grey600
+              : AppColor.textSecondaryColorLight,
+          decorationThickness: 2.0,
+        );
+
+    final resolvedInfoTextStyle =
+        infoTextStyle ??
         theme.textTheme.bodySmall?.copyWith(
           fontSize: 12,
           color: isDark
@@ -91,108 +97,130 @@ class CustomTaskCard extends StatelessWidget {
           color: cardColor ?? contextColor.cardBgColor,
           borderRadius: defaultBorderRadius,
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 12, top: 12, bottom: 12, right: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Row with Title and Checkbox
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      headingText,
-                      style: resolvedHeadingStyle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  gapW8,
-                  // Custom Checkbox
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: isCompleted
-                          ? AppColor.successColor
-                          : (isDark ? AppColor.black54 : AppColor.white),
-                      shape: BoxShape.circle,
-                      border: isCompleted
-                          ? null
-                          : Border.all(
-                              color: contextColor.borderColor.withOpacity(0.5),
-                              width: 1.5,
-                            ),
-                    ),
-                    child: isCompleted
-                        ? const Icon(
-                            Icons.check,
-                            color: AppColor.white,
-                            size: 18,
-                          )
-                        : null,
-                  ),
-                ],
+        child: Stack(
+          children: [
+            // MAIN CONTENT
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 12,
+                top: 12,
+                bottom: 12,
+                right: 12, // give space for checkbox
               ),
-              gapH8,
-
-              // Body Text
-              if (bodyText != null && bodyText!.isNotEmpty)
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    bodyText!,
-                    style: resolvedBodyStyle,
-                    maxLines: 3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Text(
+                    headingText,
+                    style: resolvedHeadingStyle,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+
+                  gapH8,
+
+                  // Body Text
+                  if (bodyText != null && bodyText!.isNotEmpty)
+                    Text(
+                      bodyText!,
+                      style: resolvedBodyStyle,
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                  const Spacer(),
+
+                  // Info Section
+                  if (dateText != null || timeText != null)
+                    Container(
+                      padding: paddingH8V4,
+                      decoration: BoxDecoration(
+                        color: infoSectionBgColor,
+                        borderRadius: radius8,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (dateText != null)
+                            Row(
+                              children: [
+                                dateIcon ??
+                                    Icon(
+                                      Icons.calendar_today_outlined,
+                                      size: 14,
+                                      color: resolvedInfoTextStyle?.color,
+                                    ),
+                                gapW8,
+                                Text(dateText!, style: resolvedInfoTextStyle),
+                              ],
+                            ),
+                          if (dateText != null && timeText != null) gapH4,
+                          if (timeText != null)
+                            Row(
+                              children: [
+                                timeIcon ??
+                                    Icon(
+                                      Icons.access_time_outlined,
+                                      size: 14,
+                                      color: resolvedInfoTextStyle?.color,
+                                    ),
+                                gapW8,
+                                Text(timeText!, style: resolvedInfoTextStyle),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
+            // ✅ CHECKBOX positioned at top-right
+            Positioned(
+              top: 0,
+              right: 0,
+              child: InkWell(
+                onTap: onToggleCheckbox != null
+                    ? () => onToggleCheckbox!(!isCompleted)
+                    : null,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
                 ),
-
-              const Spacer(),
-
-              // Date and Time info section
-              if (dateText != null || timeText != null)
-                Container(
-                  padding: paddingH8V4,
+                child: Container(
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
-                    color: infoSectionBgColor,
-                    borderRadius: radius8,
+                    color: isCompleted
+                        ? AppColor.successColor
+                        : (isDark ? AppColor.black54 : AppColor.white),
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.only(
+                      // topRight: Radius.circular(15),
+                      topLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                    ),
+                    border: isCompleted
+                        ? Border.all(color: AppColor.white, width: 1.5)
+                        : Border.all(
+                            color: contextColor.borderColor.withOpacity(0.5),
+                            width: 1.5,
+                          ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (dateText != null)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            dateIcon ??
-                                Icon(Icons.calendar_today_outlined,
-                                    size: 14,
-                                    color: resolvedInfoTextStyle?.color),
-                            gapW8,
-                            Text(dateText!, style: resolvedInfoTextStyle),
-                          ],
+                  child: isCompleted
+                      ? const Icon(Icons.check, color: AppColor.white, size: 18)
+                      : const Icon(
+                          Icons.check,
+                          color: AppColor.grey300,
+                          size: 18,
                         ),
-                      if (dateText != null && timeText != null) gapH4,
-                      if (timeText != null)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            timeIcon ??
-                                Icon(Icons.access_time_outlined,
-                                    size: 14,
-                                    color: resolvedInfoTextStyle?.color),
-                            gapW8,
-                            Text(timeText!, style: resolvedInfoTextStyle),
-                          ],
-                        ),
-                    ],
-                  ),
                 ),
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );
