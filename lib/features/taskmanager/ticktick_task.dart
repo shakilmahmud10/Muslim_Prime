@@ -1,10 +1,11 @@
-// lib/features/taskmanager/ticktick_task.dart
+// File Name : lib\features\taskmanager\ticktick_task.dart
 
 import 'package:flutter/material.dart';
 import 'package:muslim_prime_ui/core/config/app_color.dart';
 import 'package:muslim_prime_ui/core/custom_library/custom_app_bar/custom_app_bar_widget.dart';
 import 'package:muslim_prime_ui/core/custom_library/custom_tab_bar/custom_tab_bar.dart';
 import 'package:muslim_prime_ui/core/custom_library/custom_task_list/custom_task_list.dart';
+import 'package:muslim_prime_ui/core/static/ui_const.dart'; // twelvePx, twentyPx এর জন্য
 
 class TicktickTask extends StatefulWidget {
   const TicktickTask({super.key});
@@ -16,16 +17,14 @@ class TicktickTask extends StatefulWidget {
 class _TicktickTaskState extends State<TicktickTask>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  TaskViewMode _currentViewMode = TaskViewMode.grid; // ✅ নতুন স্টেট
 
-  // State for the demo task
-  bool _isTaskCompleted = false;
-
-  // ডেমো ডেটা ছবির উপর ভিত্তি করে
+  // ডেমো ডেটা ছবির উপর ভিত্তি করে (Mutable List)
   final List<Map<String, dynamic>> taskData = [
     {
-      'heading': 'This is Heading2',
+      'heading': 'This is Heading 1',
       'body':
-          'Typeface without relying on meaningful content. Lorem ipsum may work for the whole country and for color combinational flag that increase the redandacy of science work.',
+          'Typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before. Jrfwenof ef oefaov awevdncvadj fawej ejfnawef awecf vawej fnawe fawenfwefnawe f wfanwfk awef awenfajwerfera gj jawerv zf g zsdfn sdf sd cqwrdpqwo wdvqeiw rfqw.',
       'isCompleted': true,
       'isStrikethrough': true,
       'cardColor': AppColor.taskCardOrange,
@@ -33,19 +32,19 @@ class _TicktickTaskState extends State<TicktickTask>
       'time': 'Open 24 Hours',
     },
     {
-      'heading': 'This is Heading',
+      'heading': 'This is Heading 2',
       'body':
-          'Typeface without relying on meaningful content. Lorem ipsum may...',
-      'isCompleted': true,
-      'isStrikethrough': true,
+          'Typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before',
+      'isCompleted': false,
+      'isStrikethrough': false,
       'cardColor': AppColor.taskCardGreen,
       'date': '27 Rajab 1444 AH',
       'time': 'Open 24 Hours',
     },
     {
-      'heading': 'This is Heading',
+      'heading': 'This is Heading 3',
       'body':
-          'Typeface without relying on meaningful content. Lorem ipsum may...',
+          'Typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before',
       'isCompleted': false,
       'isStrikethrough': false,
       'cardColor': AppColor.taskCardPurple,
@@ -53,9 +52,9 @@ class _TicktickTaskState extends State<TicktickTask>
       'time': 'Open 24 Hours',
     },
     {
-      'heading': 'This is Heading',
+      'heading': 'This is Heading 4',
       'body':
-          'Typeface without relying on meaningful content. Lorem ipsum may...',
+          'Typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before',
       'isCompleted': false,
       'isStrikethrough': false,
       'cardColor': AppColor.taskCardYellow,
@@ -63,9 +62,9 @@ class _TicktickTaskState extends State<TicktickTask>
       'time': 'Open 24 Hours',
     },
     {
-      'heading': 'This is Heading',
+      'heading': 'This is Heading 5',
       'body':
-          'Typeface without relying on meaningful content. Lorem ipsum may...',
+          'Typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before',
       'isCompleted': false,
       'isStrikethrough': false,
       'cardColor': AppColor.taskCardRed,
@@ -73,9 +72,9 @@ class _TicktickTaskState extends State<TicktickTask>
       'time': 'Open 24 Hours',
     },
     {
-      'heading': 'This is Heading',
+      'heading': 'This is Heading 6',
       'body':
-          'Typeface without relying on meaningful content. Lorem ipsum may...',
+          'Typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before',
       'isCompleted': false,
       'isStrikethrough': false,
       'cardColor': AppColor.taskCardBlue,
@@ -96,25 +95,53 @@ class _TicktickTaskState extends State<TicktickTask>
     super.dispose();
   }
 
-  // Method to toggle the task completion state
-  void _toggleTaskCompletion(bool newValue) {
+  // ভিউ মোড টগল করার জন্য ফাংশন
+  void _toggleViewMode() {
     setState(() {
-      _isTaskCompleted = newValue;
+      _currentViewMode = _currentViewMode == TaskViewMode.grid
+          ? TaskViewMode.list
+          : TaskViewMode.grid;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Tick Tick Task', isRoot: true),
+      appBar: CustomAppBar(
+        title: 'Tick Tick Task',
+        isRoot: true,
+        actions: [
+          TextButton(
+            onPressed: () {}, // View Text Button
+            child: const Text(
+              'View',
+              style: TextStyle(color: AppColor.black54),
+            ),
+          ),
+          IconButton(
+            onPressed: _toggleViewMode, // ভিউ মোড টগল করা
+            icon: Icon(
+              _currentViewMode == TaskViewMode.grid
+                  ? Icons
+                        .view_module // Grid Icon (ছবিতে 4-ডট আইকন)
+                  : Icons.view_headline, // List Icon (ছবিতে 3-লাইন আইকন)
+              color: AppColor.black,
+            ),
+          ),
+          const SizedBox(width: eightPx),
+        ],
+      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+        padding: const EdgeInsets.symmetric(
+          horizontal: twelvePx,
+          vertical: twentyPx,
+        ),
         child: Column(
           children: [
             CustomTabBar(
-              borderRadius: 6,
-              indicatorBorderRadius: 6,
-              indicatorPadding: const EdgeInsets.all(6),
+              borderRadius: sixPx,
+              indicatorBorderRadius: sixPx,
+              indicatorPadding: const EdgeInsets.all(sixPx),
               tabs: const [
                 Tab(text: 'All'),
                 Tab(text: 'Family'),
@@ -123,29 +150,24 @@ class _TicktickTaskState extends State<TicktickTask>
               ],
               tabController: _tabController,
             ),
-            const SizedBox(height: 12),
+            gapH12,
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: [
                   _buildTaskList(taskData),
-                  _buildTaskList([]), // Family tasks
-                  _buildTaskList([]), // Work tasks
-                  _buildTaskList([]), // Personal tasks
+                  _buildTaskList(taskData.sublist(1, 3)), // Example subset
+                  _buildTaskList(taskData.sublist(3, 4)),
+                  _buildTaskList(taskData.sublist(4)),
                 ],
               ),
             ),
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // নতুন টাস্ক যোগ করার জন্য
-      //   },
-      //   backgroundColor: AppColor.primaryColorLight100,
-      //   child: const Icon(Icons.add, color: Colors.white),
-      //   shape: const CircleBorder(),
-      // ),
+      // FAB (আপনার আগের ধাপের মতো)
+      // floatingActionButton: CustomTaskListFAB(onTap: () {}),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -153,35 +175,48 @@ class _TicktickTaskState extends State<TicktickTask>
     if (tasks.isEmpty) {
       return const Center(child: Text('No tasks available.'));
     }
+
+    final bool isGrid = _currentViewMode == TaskViewMode.grid;
+
+    // Grid View-এর জন্য 0.88, List View-এর জন্য 0.35
+    final double aspectRatio = isGrid ? 0.88 : 0.35;
+
     return GridView.builder(
-      padding: const EdgeInsets.only(top: 8),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.8,
+      padding: const EdgeInsets.only(top: eightPx),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: isGrid ? 2 : 1,
+        childAspectRatio: aspectRatio,
         crossAxisSpacing: 0,
         mainAxisSpacing: 0,
       ),
       itemCount: tasks.length,
       itemBuilder: (context, index) {
         final task = tasks[index];
+
         return CustomTaskCard(
-          headingText: task['heading'],
-          bodyText: task['body'],
-          isCompleted: task['isCompleted'],
-          isStrikethrough: task['isStrikethrough'],
-          cardColor: task['cardColor'],
-          dateText: task['date'],
-          timeText: task['time'],
-          // onTap: () {
-          //   print('${task['heading']} tapped!');
-          // },
-          onToggle: () {
-            // Toggle the completion status of the task
-            setState(() {
-              task['isCompleted'] = !task['isCompleted'];
-              task['isStrikethrough'] = task['isCompleted'];
-            });
-          },
+          header: TaskHeader(
+            headline: 'Your Tasks',
+            isGridView: isGrid, // ✅ ভিউ মোড পাস
+          ),
+          details: TaskDetails(
+            headingText: task['heading'],
+            bodyText: task['body'],
+            isCompleted: task['isCompleted'],
+            isStrikethrough: task['isStrikethrough'],
+            cardColor: task['cardColor'],
+            dateText: task['date'],
+            timeText: task['time'],
+            onTap: () {
+              debugPrint('${task['heading']} tapped!');
+            },
+            onToggle: () {
+              // Toggle the completion status of the task
+              setState(() {
+                task['isCompleted'] = !task['isCompleted'];
+                task['isStrikethrough'] = task['isCompleted'];
+              });
+            },
+          ),
         );
       },
     );
