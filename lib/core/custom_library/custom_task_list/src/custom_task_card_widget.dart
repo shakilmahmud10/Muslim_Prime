@@ -161,8 +161,7 @@ class TaskDetails extends StatelessWidget {
     final Widget bodyTextWidget = Text(
       bodyText!,
       style: resolvedBodyStyle,
-      // maxLines: viewMode == TaskViewMode.list ? 3 : 5,
-      maxLines: 3,
+      maxLines: viewMode == TaskViewMode.list ? 2 : 3,
       overflow: TextOverflow.ellipsis,
     );
 
@@ -191,8 +190,6 @@ class TaskDetails extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
 
-                  gapH8,
-
                   // Body Text - ✅ List/Grid অনুযায়ী Expanded/সাধারণ Text ব্যবহার
                   if (bodyText != null && bodyText!.isNotEmpty)
                     viewMode == TaskViewMode.grid
@@ -201,20 +198,21 @@ class TaskDetails extends StatelessWidget {
                             child: bodyTextWidget,
                           )
                         : Padding(
-                            // ✅ List View-এর জন্য সাধারণ Padding
-                            padding: const EdgeInsets.only(
-                              bottom: eightPx,
-                            ), // নিচের দিকে সামান্য গ্যাপ
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: bodyTextWidget,
                           ),
+                  gapH8,
 
                   // Info Section
                   if (dateText != null || timeText != null)
                     Container(
-                      padding: paddingH8V4,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         color: infoSectionBgColor,
-                        borderRadius: radius8,
+                        borderRadius: radius4,
                       ),
                       child: infoSectionContent,
                     ),
