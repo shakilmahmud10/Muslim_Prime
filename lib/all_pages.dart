@@ -11,18 +11,35 @@ class AllPages extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TicktickTask()),
-                );
-              },
-              child: const Text('TickTick Task'),
+            ButtonCall(
+              buttonText: 'TickTick Tsk',
+              redirectPage: TicktickTask(),
             ),
+            ButtonCall(buttonText: 'Sample'),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ButtonCall extends StatelessWidget {
+  const ButtonCall({required this.buttonText, this.redirectPage, super.key});
+  final String buttonText;
+  final Widget? redirectPage;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        if (redirectPage != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => redirectPage!),
+          );
+        } else {}
+      },
+      child: Text(buttonText),
     );
   }
 }
