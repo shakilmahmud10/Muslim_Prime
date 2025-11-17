@@ -110,26 +110,6 @@ class _TicktickTaskState extends State<TicktickTask>
       appBar: CustomAppBar(
         title: 'Tick Tick Task',
         isRoot: true,
-        // actions: [
-        //   TextButton(
-        //     onPressed: () {}, // View Text Button
-        //     child: const Text(
-        //       'View',
-        //       style: TextStyle(color: AppColor.black54),
-        //     ),
-        //   ),
-        //   IconButton(
-        //     onPressed: _toggleViewMode, // ভিউ মোড টগল করা
-        //     icon: Icon(
-        //       _currentViewMode == TaskViewMode.grid
-        //           ? Icons
-        //                 .view_module // Grid Icon (ছবিতে 4-ডট আইকন)
-        //           : Icons.view_headline, // List Icon (ছবিতে 3-লাইন আইকন)
-        //       color: AppColor.black,
-        //     ),
-        //   ),
-        //   const SizedBox(width: eightPx),
-        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
@@ -151,30 +131,6 @@ class _TicktickTaskState extends State<TicktickTask>
               tabController: _tabController,
             ),
             gapH12,
-<<<<<<< Updated upstream
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('View Mode'),
-                Row(
-                  children: [
-                    Text('View'),
-                    SizedBox(width: eightPx),
-                    IconButton(
-                      onPressed: _toggleViewMode, // ভিউ মোড টগল করা
-                      icon: Icon(
-                        _currentViewMode == TaskViewMode.grid
-                            ? Icons
-                                  .view_module // Grid Icon (ছবিতে 4-ডট আইকন)
-                            : Icons
-                                  .view_headline, // List Icon (ছবিতে 3-লাইন আইকন)
-                        color: AppColor.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-=======
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
               child: Row(
@@ -200,7 +156,6 @@ class _TicktickTaskState extends State<TicktickTask>
                   ),
                 ],
               ),
->>>>>>> Stashed changes
             ),
             Expanded(
               child: TabBarView(
