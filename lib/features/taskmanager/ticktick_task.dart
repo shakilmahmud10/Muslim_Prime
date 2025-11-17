@@ -110,26 +110,26 @@ class _TicktickTaskState extends State<TicktickTask>
       appBar: CustomAppBar(
         title: 'Tick Tick Task',
         isRoot: true,
-        actions: [
-          TextButton(
-            onPressed: () {}, // View Text Button
-            child: const Text(
-              'View',
-              style: TextStyle(color: AppColor.black54),
-            ),
-          ),
-          IconButton(
-            onPressed: _toggleViewMode, // ভিউ মোড টগল করা
-            icon: Icon(
-              _currentViewMode == TaskViewMode.grid
-                  ? Icons
-                        .view_module // Grid Icon (ছবিতে 4-ডট আইকন)
-                  : Icons.view_headline, // List Icon (ছবিতে 3-লাইন আইকন)
-              color: AppColor.black,
-            ),
-          ),
-          const SizedBox(width: eightPx),
-        ],
+        // actions: [
+        //   TextButton(
+        //     onPressed: () {}, // View Text Button
+        //     child: const Text(
+        //       'View',
+        //       style: TextStyle(color: AppColor.black54),
+        //     ),
+        //   ),
+        //   IconButton(
+        //     onPressed: _toggleViewMode, // ভিউ মোড টগল করা
+        //     icon: Icon(
+        //       _currentViewMode == TaskViewMode.grid
+        //           ? Icons
+        //                 .view_module // Grid Icon (ছবিতে 4-ডট আইকন)
+        //           : Icons.view_headline, // List Icon (ছবিতে 3-লাইন আইকন)
+        //       color: AppColor.black,
+        //     ),
+        //   ),
+        //   const SizedBox(width: eightPx),
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
@@ -151,6 +151,29 @@ class _TicktickTaskState extends State<TicktickTask>
               tabController: _tabController,
             ),
             gapH12,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('View Mode'),
+                Row(
+                  children: [
+                    Text('View'),
+                    SizedBox(width: eightPx),
+                    IconButton(
+                      onPressed: _toggleViewMode, // ভিউ মোড টগল করা
+                      icon: Icon(
+                        _currentViewMode == TaskViewMode.grid
+                            ? Icons
+                                  .view_module // Grid Icon (ছবিতে 4-ডট আইকন)
+                            : Icons
+                                  .view_headline, // List Icon (ছবিতে 3-লাইন আইকন)
+                        color: AppColor.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -176,49 +199,72 @@ class _TicktickTaskState extends State<TicktickTask>
       return const Center(child: Text('No tasks available.'));
     }
 
-    final bool isGrid = _currentViewMode == TaskViewMode.grid;
+    // For list view, use ListView.builder; for grid view, use GridView.builder
+    if (_currentViewMode == TaskViewMode.list) {
+      return ListView.builder(
+        padding: const EdgeInsets.only(top: eightPx),
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          final task = tasks[index];
 
-    // Grid View-এর জন্য 0.88, List View-এর জন্য 0.35
-    final double aspectRatio = isGrid ? 0.88 : 0.35;
+          return CustomTaskCard(
+            header: TaskHeader(headline: 'Your Tasks', isGridView: false),
+            details: TaskDetails(
+              headingText: task['heading'],
+              bodyText: task['body'],
+              isCompleted: task['isCompleted'],
+              isStrikethrough: task['isStrikethrough'],
+              cardColor: task['cardColor'],
+              dateText: task['date'],
+              timeText: task['time'],
+              onToggle: () {
+                // Toggle the completion status of the task
+                setState(() {
+                  task['isCompleted'] = !task['isCompleted'];
+                  task['isStrikethrough'] = task['isCompleted'];
+                });
+              },
+              viewMode: TaskViewMode.list,
+            ),
+          );
+        },
+      );
+    } else {
+      // Grid view implementation
+      return GridView.builder(
+        padding: const EdgeInsets.only(top: eightPx),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.88,
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 0,
+        ),
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          final task = tasks[index];
 
-    return GridView.builder(
-      padding: const EdgeInsets.only(top: eightPx),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: isGrid ? 2 : 1,
-        childAspectRatio: aspectRatio,
-        crossAxisSpacing: 0,
-        mainAxisSpacing: 0,
-      ),
-      itemCount: tasks.length,
-      itemBuilder: (context, index) {
-        final task = tasks[index];
-
-        return CustomTaskCard(
-          header: TaskHeader(
-            headline: 'Your Tasks',
-            isGridView: isGrid, // ✅ ভিউ মোড পাস
-          ),
-          details: TaskDetails(
-            headingText: task['heading'],
-            bodyText: task['body'],
-            isCompleted: task['isCompleted'],
-            isStrikethrough: task['isStrikethrough'],
-            cardColor: task['cardColor'],
-            dateText: task['date'],
-            timeText: task['time'],
-            onTap: () {
-              debugPrint('${task['heading']} tapped!');
-            },
-            onToggle: () {
-              // Toggle the completion status of the task
-              setState(() {
-                task['isCompleted'] = !task['isCompleted'];
-                task['isStrikethrough'] = task['isCompleted'];
-              });
-            },
-          ),
-        );
-      },
-    );
+          return CustomTaskCard(
+            header: TaskHeader(headline: 'Your Tasks', isGridView: true),
+            details: TaskDetails(
+              headingText: task['heading'],
+              bodyText: task['body'],
+              isCompleted: task['isCompleted'],
+              isStrikethrough: task['isStrikethrough'],
+              cardColor: task['cardColor'],
+              dateText: task['date'],
+              timeText: task['time'],
+              onToggle: () {
+                // Toggle the completion status of the task
+                setState(() {
+                  task['isCompleted'] = !task['isCompleted'];
+                  task['isStrikethrough'] = task['isCompleted'];
+                });
+              },
+              viewMode: TaskViewMode.grid,
+            ),
+          );
+        },
+      );
+    }
   }
 }
