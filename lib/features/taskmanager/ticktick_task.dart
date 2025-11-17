@@ -151,6 +151,7 @@ class _TicktickTaskState extends State<TicktickTask>
               tabController: _tabController,
             ),
             gapH12,
+<<<<<<< Updated upstream
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -173,6 +174,33 @@ class _TicktickTaskState extends State<TicktickTask>
                   ],
                 ),
               ],
+=======
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('View Mode'),
+                  Row(
+                    children: [
+                      Text('View'),
+                      SizedBox(width: eightPx),
+                      IconButton(
+                        onPressed: _toggleViewMode, // ভিউ মোড টগল করা
+                        icon: Icon(
+                          _currentViewMode == TaskViewMode.grid
+                              ? Icons
+                                    .view_module // Grid Icon (ছবিতে 4-ডট আইকন)
+                              : Icons
+                                    .view_headline, // List Icon (ছবিতে 3-লাইন আইকন)
+                          color: AppColor.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+>>>>>>> Stashed changes
             ),
             Expanded(
               child: TabBarView(
