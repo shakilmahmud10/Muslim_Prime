@@ -5,7 +5,9 @@ import 'package:muslim_prime_ui/core/config/app_color.dart';
 import 'package:muslim_prime_ui/core/custom_library/custom_app_bar/custom_app_bar_widget.dart';
 import 'package:muslim_prime_ui/core/custom_library/custom_tab_bar/custom_tab_bar.dart';
 import 'package:muslim_prime_ui/core/custom_library/custom_task_list/custom_task_list.dart';
-import 'package:muslim_prime_ui/core/static/ui_const.dart'; // twelvePx, twentyPx এর জন্য
+import 'package:muslim_prime_ui/core/custom_library/custom_floating_button/custom_floating_button.dart';
+import 'package:muslim_prime_ui/core/static/ui_const.dart';
+import 'package:muslim_prime_ui/features/taskmanager/create_task.dart'; // twelvePx, twentyPx এর জন্য
 
 class TicktickTask extends StatefulWidget {
   const TicktickTask({super.key});
@@ -107,10 +109,7 @@ class _TicktickTaskState extends State<TicktickTask>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Tick Tick Task',
-        isRoot: true,
-      ),
+      appBar: CustomAppBar(title: 'Tick Tick Task', isRoot: true),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: twelvePx,
@@ -171,9 +170,27 @@ class _TicktickTaskState extends State<TicktickTask>
           ],
         ),
       ),
-      // FAB (আপনার আগের ধাপের মতো)
-      // floatingActionButton: CustomTaskListFAB(onTap: () {}),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // FAB using CustomFloatingButton
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 12.0, right: 10.0),
+        child: CustomFloatingButton(
+          onPressed: () {
+            // Add task functionality here
+            // print('Add task button pressed');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreateTask()),
+            );
+          },
+
+          // Using default values:
+          // icon: Icons.add (default)
+          // iconColor: Theme primary color (default)
+          // backgroundColor: white (default)
+          borderRadius: thirtyFivePx,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
